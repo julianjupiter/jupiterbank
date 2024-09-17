@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class DefaultCustomerService implements CustomerService {
+class DefaultCustomerService implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
     private final Validator validator;
