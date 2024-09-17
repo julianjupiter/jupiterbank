@@ -31,38 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-/customer-service/HELP.md
-/customer-service/target/
-/customer-service/!.mvn/wrapper/maven-wrapper.jar
-/customer-service/!**/src/main/**/target/
-/customer-service/!**/src/test/**/target/
-
-### STS ###
-/customer-service/.apt_generated
-/customer-service/.classpath
-/customer-service/.factorypath
-/customer-service/.project
-/customer-service/.settings
-/customer-service/.springBeans
-/customer-service/.sts4-cache
-
-### IntelliJ IDEA ###
-/customer-service/.idea
-/customer-service/
-/customer-service/*.iws
-/customer-service/*.iml
-/customer-service/*.ipr
-
-### NetBeans ###
-/customer-service/nbproject/private/
-/customer-service/customer-service/nbbuild/
-/customer-service/dist/
-/customer-service/nbdist/
-/customer-service/.nb-gradle/
-/customer-service/build/
-/customer-service!**/src/main/**/build/
-/customer-service!**/src/test/**/build/
-
-### VS Code ###
-/customer-service.vscode/
