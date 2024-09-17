@@ -3,6 +3,8 @@ package com.jupiterbank.customer.entity;
 import com.jupiterbank.customer.util.CustomerId;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.time.Instant;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 @Entity
 public class Customer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Convert(converter = CustomerIdConverter.class)
     private CustomerId customerId;
