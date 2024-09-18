@@ -18,3 +18,11 @@ spring:
 
 customer-api:
   base-url: ${CUSTOMER_API_BASE_URL:http://localhost:8080/customer-service/api}
+
+resilience4j:
+  retry:
+    instances:
+      findCustomerRetry:
+        max-attempts: 5
+        wait-duration: 2s
+        retry-exceptions: org.springframework.web.client.ResourceAccessException

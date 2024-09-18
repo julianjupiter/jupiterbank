@@ -197,7 +197,7 @@ public class ApiErrorHandler {
         problemDetail.setDetail("Error in account.");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperties(Map.of(
-                "errors", new ErrorDto(exception.getMessage()),
+                "errors", List.of(new ErrorDto(exception.getMessage())),
                 "createdAt", Instant.now()
         ));
 
