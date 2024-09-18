@@ -1,6 +1,5 @@
 package com.jupiterbank.account.util;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.github.f4b6a3.uuid.UuidCreator;
 import com.jupiterbank.account.exception.InvalidCustomerIdException;
 
@@ -20,7 +19,6 @@ public class CustomerId {
         return new CustomerId(UuidCreator.getTimeOrderedEpoch());
     }
 
-//    @JsonCreator
     public static CustomerId fromString(String uuid) {
         try {
             return new CustomerId(UuidCreator.fromString(uuid));
