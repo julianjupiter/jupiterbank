@@ -151,7 +151,6 @@ class DefaultTransactionService implements TransactionService {
                 throw new AccountNotFoundException("Account number " + accountNumber + " not found");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             if (log.isDebugEnabled()) {
                 log.debug(logMessage, e.getMessage());
             }
