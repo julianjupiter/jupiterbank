@@ -8,8 +8,8 @@ spring:
   datasource:
     driver-class-name: ${DATASOURCE_DRIVER_CLASS_NAME:com.mysql.cj.jdbc.Driver}
     url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/jb_customer_db?useSSL=false&serverTimezone=UTC}
-    username: ${DATASOURCE_USERNAME:root}
-    password: ${DATASOURCE_PASSWORD:}
+    username: ${DATASOURCE_USERNAME:jbadmin}
+    password: ${DATASOURCE_PASSWORD:jbadmin}
   messages:
     basename: i18n/messages
   threads:
