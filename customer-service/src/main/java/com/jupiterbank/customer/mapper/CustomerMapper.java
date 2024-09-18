@@ -44,8 +44,8 @@ public class CustomerMapper {
                 .setCreatedAt(Instant.now());
     }
 
-    public Customer map(Customer customer, UpdateCustomerDto updateCustomerDto) {
-        return customer
+    public void map(Customer customer, UpdateCustomerDto updateCustomerDto) {
+        customer
                 .setLastName(updateCustomerDto.lastName())
                 .setFirstName(updateCustomerDto.firstName())
                 .setMiddleName(updateCustomerDto.middleName())

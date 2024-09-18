@@ -63,8 +63,8 @@ class DefaultCustomerService implements CustomerService {
         this.validateCustomer(updateCustomerDto);
         var existingCustomer = this.customerRepository.findByCustomerId(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer " + customerId + " not found"));
-        var customerUpdate = this.customerMapper.map(existingCustomer, updateCustomerDto);
-        var updatedCustomer = this.customerRepository.save(customerUpdate);
+        this.customerMapper.map(existingCustomer, updateCustomerDto);
+        var updatedCustomer = this.customerRepository.save(existingCustomer);
 
         return this.customerMapper.map(updatedCustomer);
     }
