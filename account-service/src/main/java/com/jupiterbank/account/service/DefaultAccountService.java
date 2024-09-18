@@ -54,7 +54,7 @@ class DefaultAccountService implements AccountService {
 
     @Override
     public AccountDto create(CreateAccountDto createAccountDto) {
-        this.validateAccount(createAccountDto);
+        this.validateCreateAccountRequest(createAccountDto);
         var newAccount = this.accountMapper.map(createAccountDto);
         var createdAccount = this.accountRepository.save(newAccount);
 
@@ -82,7 +82,7 @@ class DefaultAccountService implements AccountService {
         this.accountRepository.save(account);
     }
 
-    private void validateAccount(CreateAccountDto createAccountDto) {
+    private void validateCreateAccountRequest(CreateAccountDto createAccountDto) {
         var result = ValidatorUtil.validate(this.validator, createAccountDto, "createAccountDto");
         if (result.hasErrors()) {
             var errors = ValidatorUtil.validationErrors(result, this.messageSource);
