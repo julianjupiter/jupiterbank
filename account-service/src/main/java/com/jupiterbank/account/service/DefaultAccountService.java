@@ -1,20 +1,27 @@
 package com.jupiterbank.account.service;
 
+import com.jupiterbank.account.client.customer.CustomerDto;
 import com.jupiterbank.account.dto.AccountDto;
 import com.jupiterbank.account.dto.CreateAccountDto;
 import com.jupiterbank.account.dto.UpdateAccountDto;
 import com.jupiterbank.account.entity.AccountStatus;
+import com.jupiterbank.account.exception.AccountException;
 import com.jupiterbank.account.exception.AccountNotFoundException;
+import com.jupiterbank.account.exception.CustomerNotFoundException;
 import com.jupiterbank.account.exception.DataValidationException;
 import com.jupiterbank.account.mapper.AccountMapper;
 import com.jupiterbank.account.repository.AccountRepository;
 import com.jupiterbank.account.util.AccountNumber;
 import com.jupiterbank.account.util.CustomerId;
 import com.jupiterbank.account.util.ValidatorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -27,16 +34,23 @@ import java.util.Optional;
 @Service
 @Transactional
 class DefaultAccountService implements AccountService {
+    private static final Logger log = LoggerFactory.getLogger(DefaultAccountService.class);
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
     private final Validator validator;
     private final MessageSource messageSource;
+    private final CustomerService customerService;
 
-    DefaultAccountService(AccountRepository accountRepository, AccountMapper accountMapper, Validator validator, MessageSource messageSource) {
+    DefaultAccountService(AccountRepository accountRepository,
+                          AccountMapper accountMapper,
+                          Validator validator,
+                          MessageSource messageSource,
+                          CustomerService customerService) {
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
         this.validator = validator;
         this.messageSource = messageSource;
+        this.customerService = customerService;
     }
 
     @Override
@@ -55,6 +69,9 @@ class DefaultAccountService implements AccountService {
     @Override
     public AccountDto create(CreateAccountDto createAccountDto) {
         this.validateCreateAccountRequest(createAccountDto);
+        // If no exception, customer exists
+        this.getCustomer(createAccountDto.customerId());
+
         var newAccount = this.accountMapper.map(createAccountDto);
         var createdAccount = this.accountRepository.save(newAccount);
 
@@ -86,5 +103,27 @@ class DefaultAccountService implements AccountService {
             var errors = ValidatorUtil.validationErrors(result, this.messageSource);
             throw new DataValidationException("Invalid data request", errors);
         }
+    }
+
+    private CustomerDto getCustomer(CustomerId customerId) {
+        var logMessage = "Error on request for customer: {}";
+        try {
+            return this.customerService.findById(customerId)
+                    .orElseThrow(() -> new AccountException("Error on request for customer", HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (HttpClientErrorException e) {
+            if (log.isDebugEnabled()) {
+                log.debug(logMessage, e.getMessage());
+            }
+
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                throw new CustomerNotFoundException("Customer ID " + customerId + " not found");
+            }
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.debug(logMessage, e.getMessage());
+            }
+        }
+
+        throw new AccountException("Error on request for customer", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

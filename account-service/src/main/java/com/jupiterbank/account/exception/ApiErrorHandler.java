@@ -44,6 +44,26 @@ public class ApiErrorHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(CustomerNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail customerNotFoundException(HttpServletRequest request, CustomerNotFoundException exception) {
+        if (log.isDebugEnabled()) {
+            log.debug("CUSTOMER_NOT_FOUND_EXCEPTION", exception);
+        }
+
+        var httpStatus = HttpStatus.NOT_FOUND;
+        var problemDetail = ProblemDetail.forStatus(httpStatus);
+        problemDetail.setTitle(httpStatus.getReasonPhrase());
+        problemDetail.setDetail("Customer not found.");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperties(Map.of(
+                "errors", exception.getErrorDtos(),
+                "createdAt", Instant.now()
+        ));
+
+        return problemDetail;
+    }
+
     @ExceptionHandler(InvalidAccountIdException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ProblemDetail invalidAccountIdException(HttpServletRequest request, InvalidAccountIdException exception) {
@@ -144,6 +164,45 @@ public class ApiErrorHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ProblemDetail httpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException exception) {
+        if (log.isDebugEnabled()) {
+            log.debug("HTTP_MESSAGE_NOT_READABLE_EXCEPTION", exception);
+        }
+
+        var httpStatus = HttpStatus.BAD_REQUEST;
+        var problemDetail = ProblemDetail.forStatus(httpStatus);
+        problemDetail.setTitle(httpStatus.getReasonPhrase());
+        problemDetail.setDetail("Invalid request format.");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperties(Map.of(
+                "createdAt", Instant.now()
+        ));
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(AccountException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ProblemDetail accountException(HttpServletRequest request, AccountException exception) {
+        if (log.isDebugEnabled()) {
+            log.debug("ACCOUNT_EXCEPTION", exception);
+        }
+
+        var httpStatus = exception.getStatus();
+        var problemDetail = ProblemDetail.forStatus(httpStatus);
+        problemDetail.setTitle(httpStatus.getReasonPhrase());
+        problemDetail.setDetail("Error in account.");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperties(Map.of(
+                "errors", new ErrorDto(exception.getMessage()),
+                "createdAt", Instant.now()
+        ));
+
+        return problemDetail;
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail otherException(HttpServletRequest request, Exception exception) {
@@ -156,25 +215,6 @@ public class ApiErrorHandler {
         var problemDetail = ProblemDetail.forStatus(httpStatus);
         problemDetail.setTitle(httpStatus.getReasonPhrase());
         problemDetail.setDetail(exception.getMessage());
-        problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperties(Map.of(
-                "createdAt", Instant.now()
-        ));
-
-        return problemDetail;
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ProblemDetail httpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException exception) {
-        if (log.isDebugEnabled()) {
-            log.debug("HTTP_MESSAGE_NOT_READABLE_EXCEPTION", exception);
-        }
-
-        var httpStatus = HttpStatus.BAD_REQUEST;
-        var problemDetail = ProblemDetail.forStatus(httpStatus);
-        problemDetail.setTitle(httpStatus.getReasonPhrase());
-        problemDetail.setDetail("Invalid request format.");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperties(Map.of(
                 "createdAt", Instant.now()
