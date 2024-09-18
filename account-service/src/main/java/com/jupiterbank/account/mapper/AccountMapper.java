@@ -2,6 +2,7 @@ package com.jupiterbank.account.mapper;
 
 import com.jupiterbank.account.dto.AccountDto;
 import com.jupiterbank.account.dto.CreateAccountDto;
+import com.jupiterbank.account.dto.UpdateAccountDto;
 import com.jupiterbank.account.entity.Account;
 import com.jupiterbank.account.entity.AccountStatus;
 import com.jupiterbank.account.util.AccountNumber;
@@ -37,5 +38,11 @@ public class AccountMapper {
                 .setDateOpened(createAccountDto.dateOpened())
                 .setAccountStatus(AccountStatus.ACTIVE)
                 .setCreatedAt(Instant.now());
+    }
+
+    public void map(Account account, UpdateAccountDto updateAccountDto) {
+        account
+                .setBalance(updateAccountDto.amount())
+                .setUpdatedAt(Instant.now());
     }
 }

@@ -7,5 +7,5 @@ import java.math.BigDecimal;
 /**
  * @author Julian Jupiter
  */
-public record UpdateAccountDto(@NotNull(message = "${NotNull.updateAccountDto.balance}") BigDecimal balance) {
+public record UpdateAccountDto(@NotNull(message = "${NotNull.updateAccountDto.amount}") BigDecimal amount) {
 }

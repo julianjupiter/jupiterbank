@@ -65,9 +65,7 @@ class DefaultAccountService implements AccountService {
     public AccountDto update(AccountNumber accountNumber, UpdateAccountDto updateAccountDto) {
         var existingAccount = this.accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountNotFoundException("Account number " +  accountNumber + " not found"));
-        existingAccount
-                .setBalance(updateAccountDto.balance())
-                .setUpdatedAt(Instant.now());
+        this.accountMapper.map(existingAccount, updateAccountDto);
         var updatedAccount = this.accountRepository.save(existingAccount);
 
         return this.accountMapper.map(updatedAccount);
