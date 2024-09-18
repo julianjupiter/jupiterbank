@@ -10,8 +10,8 @@ import jakarta.persistence.Converter;
 @Converter
 public class AccountIdConverter implements AttributeConverter<AccountNumber, String> {
     @Override
-    public String convertToDatabaseColumn(AccountNumber customerId) {
-        return customerId != null ? customerId.toString() : null;
+    public String convertToDatabaseColumn(AccountNumber accountNumber) {
+        return accountNumber != null ? accountNumber.toString() : null;
     }
 
     @Override
