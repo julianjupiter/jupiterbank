@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -35,7 +36,7 @@ public class AccountController {
     }
 
     @GetMapping
-    public DataResponseDto findByCustomerId(HttpServletRequest request, @RequestParam(name = "customer-id") String customerId) {
+    public DataResponseDto findByCustomerId(HttpServletRequest request, @RequestParam("customer-id") String customerId) {
         var cId = CustomerId.fromString(customerId);
         var accounts = this.accountService.findByCustomerId(cId);
 
@@ -53,15 +54,16 @@ public class AccountController {
                         URI.create(request.getRequestURI()),
                         Instant.now()
                 ))
-                .orElseThrow(() -> new AccountNotFoundException("Account num ber " + accountNumber + " not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account number " + accountNumber + " not found"));
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DataResponseDto create(HttpServletRequest request, @RequestBody CreateAccountDto createAccountDto) {
         var createAccount = this.accountService.create(createAccountDto);
 
         return DataResponseDto.of(
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 createAccount,
                 URI.create(request.getRequestURI()),
                 Instant.now()
