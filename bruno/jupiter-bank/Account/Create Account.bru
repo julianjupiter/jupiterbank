@@ -1,0 +1,20 @@
+meta {
+  name: Create Account
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8081/account-service/api/v1/accounts
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "accountType": "SA",
+    "customerId": "019205e4-688d-7306-855e-9767f41fb049",
+    "amount": 15000,
+    "dateOpened": "2024-09-19"
+  }
+}

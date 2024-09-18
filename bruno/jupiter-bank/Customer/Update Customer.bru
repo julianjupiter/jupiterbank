@@ -1,0 +1,23 @@
+meta {
+  name: Update Customer
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8080/customer-service/api/v1/customers
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "lastName": "Rizal",
+    "firstName": "Jose",
+    "middleName": "Protacio",
+    "dateOfBirth": "1998-06-19",
+    "contactNumber": "09161234568",
+    "emailAddress": "joserizal@gmail.com",
+    "address": "10 Rizal St., Calamba, Laguna"
+  }
+}

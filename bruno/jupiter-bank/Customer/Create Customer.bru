@@ -1,0 +1,23 @@
+meta {
+  name: Create Customer
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/customer-service/api/v1/customers
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "lastName": "Bonifacio",
+    "firstName": "Andress",
+    "middleName": "Test",
+    "dateOfBirth": "1995-11-30",
+    "contactNumber": "09161234569",
+    "emailAddress": "abonifacio@gmail.com",
+    "address": "30 Bonifaci St., Caloocan City"
+  }
+}

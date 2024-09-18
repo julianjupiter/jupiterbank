@@ -1,0 +1,15 @@
+meta {
+  name: Close Accounts
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://localhost:8081/account-service/api/v1/accounts/01920177-ff01-7dbf-8da4-75897afa5fb0/close?date-closed=2014-09-17
+  body: none
+  auth: none
+}
+
+params:query {
+  date-closed: 2014-09-17
+}

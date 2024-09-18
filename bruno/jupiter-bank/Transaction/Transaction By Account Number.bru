@@ -1,0 +1,15 @@
+meta {
+  name: Transaction By Account Number
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8082/transaction-service/api/v1/transactions?account-number=019204e0-3fa5-7205-a744-ab5f9942419a
+  body: none
+  auth: none
+}
+
+params:query {
+  account-number: 019204e0-3fa5-7205-a744-ab5f9942419a
+}

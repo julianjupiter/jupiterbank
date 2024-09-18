@@ -1,0 +1,17 @@
+meta {
+  name: Update Account
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8081/account-service/api/v1/accounts/019204e1-4d30-71aa-b17c-4362cb0dd99b
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "amount": 35000
+  }
+}

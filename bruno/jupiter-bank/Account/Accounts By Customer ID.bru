@@ -1,0 +1,15 @@
+meta {
+  name: Accounts By Customer ID
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8081/account-service/api/v1/accounts?customer-id=0192017d-589b-763b-b2c2-943ba1982f5f
+  body: none
+  auth: none
+}
+
+params:query {
+  customer-id: 0192017d-589b-763b-b2c2-943ba1982f5f
+}
