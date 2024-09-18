@@ -7,6 +7,7 @@ import com.jupiterbank.account.exception.AccountNotFoundException;
 import com.jupiterbank.account.service.AccountService;
 import com.jupiterbank.account.util.AccountNumber;
 import com.jupiterbank.account.util.CustomerId;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class AccountController {
     }
 
     @GetMapping
+    @RateLimiter(name = "findByCustomerIdRateLimiter")
     public DataResponseDto findByCustomerId(HttpServletRequest request, @RequestParam("customer-id") String customerId) {
         var cId = CustomerId.fromString(customerId);
         var accounts = this.accountService.findByCustomerId(cId);
@@ -44,6 +46,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountNumber}")
+    @RateLimiter(name = "findByAccountNumberRateLimiter")
     public DataResponseDto findByAccountNumber(HttpServletRequest request, @PathVariable String accountNumber) {
         var aNumber = AccountNumber.fromString(accountNumber);
 

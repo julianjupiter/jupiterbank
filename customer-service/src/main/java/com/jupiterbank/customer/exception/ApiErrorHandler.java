@@ -1,5 +1,6 @@
 package com.jupiterbank.customer.exception;
 
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,6 +115,26 @@ public class ApiErrorHandler {
         var problemDetail = ProblemDetail.forStatus(httpStatus);
         problemDetail.setTitle(httpStatus.getReasonPhrase());
         problemDetail.setDetail("Error encountered.");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperties(Map.of(
+                "errors", List.of(new ErrorDto(exception.getMessage())),
+                "createdAt", Instant.now()
+        ));
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(RequestNotPermitted.class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    public ProblemDetail requestNotPermittedException(HttpServletRequest request, RequestNotPermitted exception) {
+        if (log.isDebugEnabled()) {
+            log.debug("REQUEST_NOT_PERMITTED_EXCEPTION", exception);
+        }
+
+        var httpStatus = HttpStatus.TOO_MANY_REQUESTS;
+        var problemDetail = ProblemDetail.forStatus(httpStatus);
+        problemDetail.setTitle(httpStatus.getReasonPhrase());
+        problemDetail.setDetail("Too many requests.");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperties(Map.of(
                 "errors", List.of(new ErrorDto(exception.getMessage())),

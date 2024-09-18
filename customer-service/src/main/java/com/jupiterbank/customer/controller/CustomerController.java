@@ -6,6 +6,7 @@ import com.jupiterbank.customer.dto.UpdateCustomerDto;
 import com.jupiterbank.customer.exception.CustomerNotFoundException;
 import com.jupiterbank.customer.service.CustomerService;
 import com.jupiterbank.customer.util.CustomerId;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,8 @@ public class CustomerController {
     }
 
     @GetMapping
-    private DataResponseDto findAll(HttpServletRequest request) {
+    @RateLimiter(name = "findByAllCustomersRateLimiter")
+    public DataResponseDto findAll(HttpServletRequest request) {
         var customers = this.customerService.findAll();
 
         return DataResponseDto.of(
@@ -45,6 +47,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
+    @RateLimiter(name = "findByCustomerIdRateLimiter")
     public DataResponseDto findById(HttpServletRequest request, @PathVariable String customerId) {
         var cId = CustomerId.fromString(customerId);
 

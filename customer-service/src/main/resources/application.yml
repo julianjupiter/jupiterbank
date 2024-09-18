@@ -15,3 +15,15 @@ spring:
   threads:
     virtual:
       enabled: true
+
+resilience4j:
+  ratelimiter:
+    instances:
+      findByAllCustomersRateLimiter:
+        limit-for-period: 2
+        limit-refresh-period: 5s
+        timeout-duration: 0
+      findByCustomerIdRateLimiter:
+        limit-for-period: 2
+        limit-refresh-period: 5s
+        timeout-duration: 0
