@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,26 +82,6 @@ public class ApiErrorHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ProblemDetail otherException(HttpServletRequest request, Exception exception) {
-        log.info("EXCEPTION", exception);
-        if (log.isDebugEnabled()) {
-            log.debug("EXCEPTION", exception);
-        }
-
-        var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        var problemDetail = ProblemDetail.forStatus(httpStatus);
-        problemDetail.setTitle(httpStatus.getReasonPhrase());
-        problemDetail.setDetail(exception.getMessage());
-        problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperties(Map.of(
-                "createdAt", Instant.now()
-        ));
-
-        return problemDetail;
-    }
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail httpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException exception) {
@@ -114,6 +95,28 @@ public class ApiErrorHandler {
         problemDetail.setDetail("Invalid request format.");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperties(Map.of(
+                "errors", List.of(new ErrorDto(exception.getMessage())),
+                "createdAt", Instant.now()
+        ));
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ProblemDetail otherException(HttpServletRequest request, Exception exception) {
+        log.info("EXCEPTION", exception);
+        if (log.isDebugEnabled()) {
+            log.debug("EXCEPTION", exception);
+        }
+
+        var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        var problemDetail = ProblemDetail.forStatus(httpStatus);
+        problemDetail.setTitle(httpStatus.getReasonPhrase());
+        problemDetail.setDetail("Error encountered.");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperties(Map.of(
+                "errors", List.of(new ErrorDto(exception.getMessage())),
                 "createdAt", Instant.now()
         ));
 

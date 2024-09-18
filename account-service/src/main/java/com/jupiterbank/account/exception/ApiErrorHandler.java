@@ -177,6 +177,7 @@ public class ApiErrorHandler {
         problemDetail.setDetail("Invalid request format.");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperties(Map.of(
+                "errors", List.of(new ErrorDto(exception.getMessage())),
                 "createdAt", Instant.now()
         ));
 
@@ -214,9 +215,10 @@ public class ApiErrorHandler {
         var httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         var problemDetail = ProblemDetail.forStatus(httpStatus);
         problemDetail.setTitle(httpStatus.getReasonPhrase());
-        problemDetail.setDetail(exception.getMessage());
+        problemDetail.setDetail("Error encountered.");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperties(Map.of(
+                "errors", List.of(new ErrorDto(exception.getMessage())),
                 "createdAt", Instant.now()
         ));
 
