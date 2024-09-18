@@ -30,3 +30,13 @@ resilience4j:
         max-attempts: 5
         wait-duration: 2s
         retry-exceptions: org.springframework.web.client.ResourceAccessException
+  ratelimiter:
+    instances:
+      findByTransactionIdRateLimiter:
+        limit-for-period: 2
+        limit-refresh-period: 5s
+        timeout-duration: 0
+      findByAllTransactionsRateLimiter:
+        limit-for-period: 2
+        limit-refresh-period: 5s
+        timeout-duration: 0

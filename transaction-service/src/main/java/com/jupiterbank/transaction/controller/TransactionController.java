@@ -8,6 +8,7 @@ import com.jupiterbank.transaction.exception.TransactionNotFoundException;
 import com.jupiterbank.transaction.service.TransactionService;
 import com.jupiterbank.transaction.util.AccountNumber;
 import com.jupiterbank.transaction.util.TransactionId;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class TransactionController {
     }
 
     @GetMapping
+    @RateLimiter(name = "findByAllTransactionsRateLimiter")
     public DataResponseDto findAll(HttpServletRequest request,
                                    @RequestParam(name = "account-number", required = false) String accountNumber,
                                    @RequestParam(name = "transaction-type", required = false) TransactionType transactionType) {
@@ -44,7 +46,7 @@ public class TransactionController {
         if (accountNumber != null && transactionType != null) {
             var aNumber = AccountNumber.fromString(accountNumber);
             transactionDtos = this.transactionService.findByAccountNumberAndTransactionType(aNumber, transactionType);
-        } else if (accountNumber != null ) {
+        } else if (accountNumber != null) {
             var aNumber = AccountNumber.fromString(accountNumber);
             transactionDtos = this.transactionService.findByAccountNumber(aNumber);
         } else {
@@ -73,6 +75,7 @@ public class TransactionController {
     }
 
     @GetMapping("/{transactionId}")
+    @RateLimiter(name = "findByTransactionIdRateLimiter")
     public DataResponseDto findByTransactionId(HttpServletRequest request, @PathVariable String transactionId) {
         var tId = TransactionId.fromString(transactionId);
 
