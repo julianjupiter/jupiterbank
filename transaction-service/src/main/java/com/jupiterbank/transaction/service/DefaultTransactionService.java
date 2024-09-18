@@ -129,6 +129,7 @@ class DefaultTransactionService implements TransactionService {
                 if (amount.compareTo(balance) > 0) {
                     throw new InvalidWithdrawalAmountException("Amount to withdraw is greater than account balance");
                 }
+
                 yield balance.subtract(amount)
                         .setScale(2, RoundingMode.HALF_UP);
             }

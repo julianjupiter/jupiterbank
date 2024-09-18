@@ -18,3 +18,15 @@ spring:
 
 account-api:
   base-url: ${ACCOUNT_API_BASE_URL:http://localhost:8081/account-service/api}
+
+resilience4j:
+  retry:
+    instances:
+      updateBalanceRetry:
+        max-attempts: 5
+        wait-duration: 2s
+        retry-exceptions: org.springframework.web.client.ResourceAccessException
+      findByAccountNumberRetry:
+        max-attempts: 5
+        wait-duration: 2s
+        retry-exceptions: org.springframework.web.client.ResourceAccessException
