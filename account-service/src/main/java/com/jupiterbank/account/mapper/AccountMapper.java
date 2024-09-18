@@ -33,7 +33,7 @@ public class AccountMapper {
                 .setAccountType(createAccountDto.accountType())
                 .setAccountNumber(AccountNumber.create())
                 .setCustomerId(createAccountDto.customerId())
-                .setBalance(createAccountDto.balance())
+                .setBalance(createAccountDto.amount())
                 .setDateOpened(createAccountDto.dateOpened())
                 .setAccountStatus(AccountStatus.ACTIVE)
                 .setCreatedAt(Instant.now());

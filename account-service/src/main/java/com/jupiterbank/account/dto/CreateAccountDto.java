@@ -15,8 +15,8 @@ public record CreateAccountDto(
         AccountType accountType,
         @NotNull(message = "${NotNull.createAccountDto.customerId}")
         CustomerId customerId,
-        @NotNull(message = "${NotNull.createAccountDto.balance}")
-        BigDecimal balance,
+        @NotNull(message = "${NotNull.createAccountDto.amount}")
+        BigDecimal amount,
         @NotNull(message = "${NotNull.createAccountDto.dateOpened}")
         LocalDate dateOpened) {
 }
