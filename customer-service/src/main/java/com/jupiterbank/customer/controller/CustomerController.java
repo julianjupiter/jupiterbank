@@ -5,6 +5,7 @@ import com.jupiterbank.customer.dto.DataResponseDto;
 import com.jupiterbank.customer.dto.UpdateCustomerDto;
 import com.jupiterbank.customer.exception.CustomerNotFoundException;
 import com.jupiterbank.customer.service.CustomerService;
+import com.jupiterbank.customer.util.CustomerId;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,9 @@ public class CustomerController {
 
     @GetMapping("/{customerId}")
     public DataResponseDto findById(HttpServletRequest request, @PathVariable String customerId) {
-        return this.customerService.findByCustomerId(customerId)
+        var cId = CustomerId.fromString(customerId);
+
+        return this.customerService.findByCustomerId(cId)
                 .map(customerDto -> DataResponseDto.of(
                         HttpStatus.OK,
                         customerDto,
@@ -70,7 +73,9 @@ public class CustomerController {
 
     @PatchMapping("/{customerId}")
     public DataResponseDto update(HttpServletRequest request, @PathVariable String customerId, @RequestBody UpdateCustomerDto updateCustomerDto) {
-        var customer = this.customerService.update(customerId, updateCustomerDto);
+        var cId = CustomerId.fromString(customerId);
+
+        var customer = this.customerService.update(cId, updateCustomerDto);
 
         return DataResponseDto.of(
                 HttpStatus.OK,

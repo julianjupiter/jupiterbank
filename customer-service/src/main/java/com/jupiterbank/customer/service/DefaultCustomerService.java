@@ -43,9 +43,8 @@ class DefaultCustomerService implements CustomerService {
     }
 
     @Override
-    public Optional<CustomerDto> findByCustomerId(String customerId) {
-        var cId = CustomerId.fromString(customerId);
-        return this.customerRepository.findByCustomerId(cId)
+    public Optional<CustomerDto> findByCustomerId(CustomerId customerId) {
+        return this.customerRepository.findByCustomerId(customerId)
                 .map(this.customerMapper::map);
     }
 
@@ -60,11 +59,10 @@ class DefaultCustomerService implements CustomerService {
     }
 
     @Override
-    public CustomerDto update(String customerId, UpdateCustomerDto updateCustomerDto) {
-        var cId = CustomerId.fromString(customerId);
+    public CustomerDto update(CustomerId customerId, UpdateCustomerDto updateCustomerDto) {
         this.validateCustomer(updateCustomerDto);
-        var existingCustomer = this.customerRepository.findByCustomerId(cId)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer " + cId + " not found"));
+        var existingCustomer = this.customerRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer " + customerId + " not found"));
         var customerUpdate = this.customerMapper.map(existingCustomer, updateCustomerDto);
         var updatedCustomer = this.customerRepository.save(customerUpdate);
 

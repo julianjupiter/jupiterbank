@@ -14,9 +14,9 @@ import java.util.Optional;
 public interface CustomerService {
     List<CustomerDto> findAll();
 
-    Optional<CustomerDto> findByCustomerId(String customerId);
+    Optional<CustomerDto> findByCustomerId(CustomerId customerId);
 
     CustomerDto create(CreateCustomerDto createCustomerDto);
 
-    CustomerDto update(String customerId, UpdateCustomerDto updateCustomerDto);
+    CustomerDto update(CustomerId customerId, UpdateCustomerDto updateCustomerDto);
 }
